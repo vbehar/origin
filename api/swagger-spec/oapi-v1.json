@@ -14707,6 +14707,10 @@
       "type": "string",
       "description": "specifies sub-directory where the source code for the application exists, allows for sources to be built from a directory other than the root of a repository"
      },
+     "dockerfilePath": {
+      "type": "string",
+      "description": "specifies the name of the Dockerfile to use for building the Docker image"
+     },
      "sourceSecret": {
       "$ref": "v1.LocalObjectReference",
       "description": "supported auth methods are: ssh-privatekey"

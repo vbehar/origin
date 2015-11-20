@@ -968,6 +968,7 @@ func deepCopy_api_BuildSource(in buildapi.BuildSource, out *buildapi.BuildSource
 		out.Git = nil
 	}
 	out.ContextDir = in.ContextDir
+	out.DockerfilePath = in.DockerfilePath
 	if in.SourceSecret != nil {
 		if newVal, err := c.DeepCopy(in.SourceSecret); err != nil {
 			return err

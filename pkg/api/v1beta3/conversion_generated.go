@@ -1430,6 +1430,7 @@ func autoconvert_api_BuildSource_To_v1beta3_BuildSource(in *buildapi.BuildSource
 		out.Git = nil
 	}
 	out.ContextDir = in.ContextDir
+	out.DockerfilePath = in.DockerfilePath
 	if in.SourceSecret != nil {
 		out.SourceSecret = new(pkgapiv1beta3.LocalObjectReference)
 		if err := convert_api_LocalObjectReference_To_v1beta3_LocalObjectReference(in.SourceSecret, out.SourceSecret, s); err != nil {
@@ -2159,6 +2160,7 @@ func autoconvert_v1beta3_BuildSource_To_api_BuildSource(in *apiv1beta3.BuildSour
 		out.Git = nil
 	}
 	out.ContextDir = in.ContextDir
+	out.DockerfilePath = in.DockerfilePath
 	if in.SourceSecret != nil {
 		out.SourceSecret = new(pkgapi.LocalObjectReference)
 		if err := convert_v1beta3_LocalObjectReference_To_api_LocalObjectReference(in.SourceSecret, out.SourceSecret, s); err != nil {
