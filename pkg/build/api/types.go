@@ -209,8 +209,8 @@ type BuildSource struct {
 	// repository.
 	ContextDir string
 
-	// DockerfilePath is the name of the Dockerfile that will be used to build the Docker image.
-	DockerfilePath string
+	// DockerfileName is the name of the Dockerfile that will be used to build the Docker image.
+	DockerfileName string
 
 	// SourceSecret is the name of a Secret that would be used for setting
 	// up the authentication for cloning private repository.

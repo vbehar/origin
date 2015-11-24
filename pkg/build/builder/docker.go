@@ -26,6 +26,9 @@ import (
 	"github.com/openshift/origin/pkg/util/docker/dockerfile"
 )
 
+// defaultDockerfileName is the default name of the Dockerfile
+const defaultDockerfileName = "Dockerfile"
+
 // DockerBuilder builds Docker images given a git repository URL
 type DockerBuilder struct {
 	dockerClient DockerClient
@@ -111,10 +114,10 @@ func (d *DockerBuilder) addBuildParameters(dir string) error {
 	}
 
 	var dockerfilePath string
-	if d.build.Spec.Source.DockerfilePath != "" {
-		dockerfilePath = filepath.Join(contextDirPath, d.build.Spec.Source.DockerfilePath)
+	if d.build.Spec.Source.DockerfileName != "" {
+		dockerfilePath = filepath.Join(contextDirPath, d.build.Spec.Source.DockerfileName)
 	} else {
-		dockerfilePath = filepath.Join(contextDirPath, "Dockerfile")
+		dockerfilePath = filepath.Join(contextDirPath, defaultDockerfileName)
 	}
 
 	f, err := os.Open(dockerfilePath)
@@ -215,14 +218,16 @@ func (d *DockerBuilder) setupPullSecret() (*docker.AuthConfigurations, error) {
 
 // dockerBuild performs a docker build on the source that has been retrieved
 func (d *DockerBuilder) dockerBuild(dir string) error {
-	var dockerfilePath string
 	var noCache bool
 	var forcePull bool
+	dockerfileName := defaultDockerfileName
 	if d.build.Spec.Strategy.DockerStrategy != nil {
 		if d.build.Spec.Source.ContextDir != "" {
 			dir = filepath.Join(dir, d.build.Spec.Source.ContextDir)
 		}
-		dockerfilePath = d.build.Spec.Source.DockerfilePath
+		if d.build.Spec.Source.DockerfileName != "" {
+			dockerfileName = d.build.Spec.Source.DockerfileName
+		}
 		noCache = d.build.Spec.Strategy.DockerStrategy.NoCache
 		forcePull = d.build.Spec.Strategy.DockerStrategy.ForcePull
 	}
@@ -230,7 +235,7 @@ func (d *DockerBuilder) dockerBuild(dir string) error {
 	if err != nil {
 		return err
 	}
-	return buildImage(d.dockerClient, dir, dockerfilePath, noCache, d.build.Status.OutputDockerImageReference, d.tar, auth, forcePull)
+	return buildImage(d.dockerClient, dir, dockerfileName, noCache, d.build.Status.OutputDockerImageReference, d.tar, auth, forcePull)
 }
 
 // replaceLastFrom changes the last FROM instruction of node to point to the

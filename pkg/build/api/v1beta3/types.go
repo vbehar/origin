@@ -159,8 +159,8 @@ type BuildSource struct {
 	// repository.
 	ContextDir string `json:"contextDir,omitempty"`
 
-	// DockerfilePath is the name of the Dockerfile that will be used to build the Docker image.
-	DockerfilePath string `json:"dockerfilePath,omitempty"`
+	// DockerfileName is the name of the Dockerfile that will be used to build the Docker image.
+	DockerfileName string `json:"dockerfileName,omitempty"`
 
 	// SourceSecret is the name of a Secret that would be used for setting
 	// up the authentication for cloning private repository.
