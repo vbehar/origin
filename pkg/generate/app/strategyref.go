@@ -51,8 +51,8 @@ func (g *BuildStrategyRefGenerator) FromSTIBuilderImage(image *ImageRef) (*Build
 	}, nil
 }
 
-func (g *BuildStrategyRefGenerator) detectDockerFile(dir string) (contextDir string, found bool, err error) {
-	dockerFiles, err := g.dockerfileFinder.Find(dir)
+func (g *BuildStrategyRefGenerator) detectDockerFile(dir string, dockerfileName string) (contextDir string, found bool, err error) {
+	dockerFiles, err := g.dockerfileFinder.Find(dir, dockerfileName)
 	if err != nil {
 		return "", false, err
 	}

@@ -93,11 +93,12 @@ func nameFromGitURL(url *url.URL) (string, bool) {
 
 // SourceRef is a reference to a build source
 type SourceRef struct {
-	URL        *url.URL
-	Ref        string
-	Dir        string
-	Name       string
-	ContextDir string
+	URL            *url.URL
+	Ref            string
+	Dir            string
+	Name           string
+	ContextDir     string
+	DockerfileName string
 
 	DockerfileContents string
 
@@ -149,6 +150,7 @@ func (r *SourceRef) BuildSource() (*buildapi.BuildSource, []buildapi.BuildTrigge
 			Ref: r.Ref,
 		}
 		source.ContextDir = r.ContextDir
+		source.DockerfileName = r.DockerfileName
 	}
 	if r.Binary {
 		source.Type = buildapi.BuildSourceBinary

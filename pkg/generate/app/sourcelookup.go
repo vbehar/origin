@@ -74,12 +74,13 @@ func IsRemoteRepository(s string) bool {
 
 // SourceRepository represents a code repository that may be the target of a build.
 type SourceRepository struct {
-	location   string
-	url        url.URL
-	localDir   string
-	remoteURL  *url.URL
-	contextDir string
-	info       *SourceRepositoryInfo
+	location       string
+	url            url.URL
+	localDir       string
+	remoteURL      *url.URL
+	contextDir     string
+	dockerfileName string
+	info           *SourceRepositoryInfo
 
 	usedBy           []ComponentReference
 	buildWithDocker  bool
@@ -247,6 +248,16 @@ func (r *SourceRepository) ContextDir() string {
 	return r.contextDir
 }
 
+// SetDockerfileName sets the Dockerfile's name to use for the source repository
+func (r *SourceRepository) SetDockerfileName(dockerfileName string) {
+	r.dockerfileName = dockerfileName
+}
+
+// DockerfileName returns the Dockerfile's name of the source repository
+func (r *SourceRepository) DockerfileName() string {
+	return r.dockerfileName
+}
+
 // SourceRepositories is a list of SourceRepository objects
 type SourceRepositories []*SourceRepository
 
@@ -372,6 +383,7 @@ func StrategyAndSourceForRepository(repo *SourceRepository, image *ImageRef) (*B
 		source.URL = remoteURL
 		source.Ref = remoteURL.Fragment
 		source.ContextDir = repo.ContextDir()
+		source.DockerfileName = repo.DockerfileName()
 	}
 
 	return strategy, source, nil

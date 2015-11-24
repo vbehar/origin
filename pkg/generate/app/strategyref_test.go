@@ -61,7 +61,7 @@ type fakeFinder struct {
 	result []string
 }
 
-func (f *fakeFinder) Find(dir string) ([]string, error) {
+func (f *fakeFinder) Find(dir string, dockerfileName string) ([]string, error) {
 	return f.result, nil
 }
 

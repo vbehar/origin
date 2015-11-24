@@ -440,7 +440,7 @@ func TestDetectSource(t *testing.T) {
 			cfg: &AppConfig{
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				dockerSearcher: dockerSearcher,
 			},
@@ -536,7 +536,7 @@ func TestRunAll(t *testing.T) {
 				},
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -572,7 +572,7 @@ func TestRunAll(t *testing.T) {
 				},
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -609,7 +609,7 @@ func TestRunAll(t *testing.T) {
 				},
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -641,7 +641,7 @@ func TestRunAll(t *testing.T) {
 
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -684,7 +684,7 @@ func TestRunAll(t *testing.T) {
 				templateFileSearcher: &app.TemplateFileSearcher{},
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:            kapi.Scheme,
 				osclient:         &client.Fake{},
@@ -721,7 +721,7 @@ func TestRunAll(t *testing.T) {
 
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -766,7 +766,7 @@ func TestRunAll(t *testing.T) {
 				},
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -806,7 +806,7 @@ func TestRunAll(t *testing.T) {
 				},
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -1022,7 +1022,7 @@ func TestRunBuilds(t *testing.T) {
 
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -1059,7 +1059,7 @@ func TestRunBuilds(t *testing.T) {
 
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -1167,7 +1167,7 @@ func TestNewBuildEnvVars(t *testing.T) {
 				dockerSearcher:        dockerSearcher,
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},
@@ -1228,7 +1228,7 @@ func TestNewAppBuildConfigEnvVars(t *testing.T) {
 				dockerSearcher:     dockerSearcher,
 				detector: app.SourceRepositoryEnumerator{
 					Detectors: source.DefaultDetectors,
-					Tester:    dockerfile.NewTester(),
+					Tester:    dockerfile.NewTester(&dockerfile.DefaultDockerfileName),
 				},
 				typer:           kapi.Scheme,
 				osclient:        &client.Fake{},

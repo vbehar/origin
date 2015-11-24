@@ -79,7 +79,7 @@ func TestFind(t *testing.T) {
 		},
 	}
 	f := finder{makeWalkFunc(files)}
-	dockerfiles, err := f.Find(".")
+	dockerfiles, err := f.Find(".", DefaultDockerfileName)
 	if err != nil {
 		t.Errorf("Unexpected error returned: %v", err)
 	}
@@ -87,6 +87,33 @@ func TestFind(t *testing.T) {
 		t.Errorf("Unexpected number of Dockerfiles returned: %d. Expected: 2", len(dockerfiles))
 	}
 	expectedResult := []string{"test/Dockerfile", "Dockerfile"}
+	if !reflect.DeepEqual(dockerfiles, expectedResult) {
+		t.Errorf("Unexpected result: %v. Expected: %v", dockerfiles, expectedResult)
+	}
+}
+
+func TestFindCustomDockerfile(t *testing.T) {
+	files := []file{
+		{
+			name:  "CustomDockerfile",
+			path:  "CustomDockerfile",
+			isDir: false,
+		},
+		{
+			name:  "OtherDockerfile",
+			path:  "OtherDockerfile",
+			isDir: false,
+		},
+	}
+	f := finder{makeWalkFunc(files)}
+	dockerfiles, err := f.Find(".", "CustomDockerfile")
+	if err != nil {
+		t.Errorf("Unexpected error returned: %v", err)
+	}
+	if len(dockerfiles) != 1 {
+		t.Errorf("Unexpected number of Dockerfiles returned: %d. Expected: 1", len(dockerfiles))
+	}
+	expectedResult := []string{"CustomDockerfile"}
 	if !reflect.DeepEqual(dockerfiles, expectedResult) {
 		t.Errorf("Unexpected result: %v. Expected: %v", dockerfiles, expectedResult)
 	}
@@ -113,7 +140,7 @@ func TestFindError(t *testing.T) {
 		},
 	}
 	f := finder{makeWalkFunc(files)}
-	_, findErr := f.Find(".")
+	_, findErr := f.Find(".", DefaultDockerfileName)
 	if findErr != err {
 		t.Errorf("Did not get expected error: %v. Got: %v", err, findErr)
 	}

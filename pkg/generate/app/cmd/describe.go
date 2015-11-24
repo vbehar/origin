@@ -105,7 +105,7 @@ func describeBuildPipelineWithImage(out io.Writer, ref app.ComponentReference, p
 		case len(s.DockerfileContents) > 0:
 			source = "a predefined Dockerfile"
 		case s.URL != nil:
-			source = fmt.Sprintf("source code from %s", s.URL)
+			source = fmt.Sprintf("source code from %s with %s", s.URL, s.DockerfileName)
 		default:
 			source = "<unknown>"
 		}

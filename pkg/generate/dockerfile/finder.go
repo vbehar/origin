@@ -6,15 +6,22 @@ import (
 	"strings"
 )
 
+var DefaultDockerfileName string = "Dockerfile"
+
 type Tester interface {
 	Has(dir string) (string, bool, error)
 }
 
+type tester struct {
+	statFunc       StatFunc
+	dockerfileName *string
+}
+
 type StatFunc func(path string) (os.FileInfo, error)
 
-func (t StatFunc) Has(dir string) (string, bool, error) {
-	path := filepath.Join(dir, "Dockerfile")
-	_, err := t(path)
+func (t tester) Has(dir string) (string, bool, error) {
+	path := filepath.Join(dir, *t.dockerfileName)
+	_, err := t.statFunc(path)
 	if os.IsNotExist(err) {
 		return "", false, nil
 	}
@@ -24,13 +31,17 @@ func (t StatFunc) Has(dir string) (string, bool, error) {
 	return path, true, nil
 }
 
-func NewTester() Tester {
-	return StatFunc(os.Stat)
+func NewTester(dockerfileName *string) Tester {
+	return tester{
+		statFunc:       StatFunc(os.Stat),
+		dockerfileName: dockerfileName,
+	}
 }
 
 // Finder allows searching for Dockerfiles in a given directory
+// with a given name
 type Finder interface {
-	Find(dir string) ([]string, error)
+	Find(dir string, dockerfileName string) ([]string, error)
 }
 
 type finder struct {
@@ -43,7 +54,7 @@ func NewFinder() Finder {
 }
 
 // Find returns the relative paths of Dockerfiles in the given directory dir.
-func (f *finder) Find(dir string) ([]string, error) {
+func (f *finder) Find(dir string, dockerfileName string) ([]string, error) {
 	dockerfiles := []string{}
 	err := f.fsWalk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -54,7 +65,7 @@ func (f *finder) Find(dir string) ([]string, error) {
 			return filepath.SkipDir
 		}
 		// Add relative path to Dockerfile.
-		if isDockerfile(info) {
+		if isDockerfile(info, dockerfileName) {
 			relpath, err := filepath.Rel(dir, path)
 			if err != nil {
 				return err
@@ -67,7 +78,7 @@ func (f *finder) Find(dir string) ([]string, error) {
 }
 
 // isDockerfile returns true if info looks like a Dockerfile. It must be named
-// "Dockerfile" and be either a regular file or a symlink.
-func isDockerfile(info os.FileInfo) bool {
-	return info.Name() == "Dockerfile" && (info.Mode().IsRegular() || info.Mode()&os.ModeSymlink != 0)
+// dockerfileName and be either a regular file or a symlink.
+func isDockerfile(info os.FileInfo, dockerfileName string) bool {
+	return info.Name() == dockerfileName && (info.Mode().IsRegular() || info.Mode()&os.ModeSymlink != 0)
 }

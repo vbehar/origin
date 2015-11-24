@@ -44,6 +44,7 @@ var ErrNoDockerfileDetected = fmt.Errorf("No Dockerfile was found in the reposit
 type AppConfig struct {
 	SourceRepositories []string
 	ContextDir         string
+	DockerfileName     string
 
 	Components    []string
 	ImageStreams  []string
@@ -145,13 +146,14 @@ type QueryResult struct {
 // NewAppConfig returns a new AppConfig, but you must set your typer, mapper, and clientMapper after the command has been run
 // and flags have been parsed.
 func NewAppConfig() *AppConfig {
-	return &AppConfig{
-		detector: app.SourceRepositoryEnumerator{
-			Detectors: source.DefaultDetectors,
-			Tester:    dockerfile.NewTester(),
-		},
+	config := &AppConfig{
 		refBuilder: &app.ReferenceBuilder{},
 	}
+	config.detector = app.SourceRepositoryEnumerator{
+		Detectors: source.DefaultDetectors,
+		Tester:    dockerfile.NewTester(&config.DockerfileName),
+	}
+	return config
 }
 
 func (c *AppConfig) SetMapper(mapper meta.RESTMapper) {
@@ -247,6 +249,7 @@ func (c *AppConfig) individualSourceRepositories() (app.SourceRepositories, erro
 			repo.SetContextDir(c.ContextDir)
 			if c.Strategy == "docker" {
 				repo.BuildWithDocker()
+				repo.SetDockerfileName(c.DockerfileName)
 			}
 		}
 	}
@@ -334,6 +337,7 @@ func (c *AppConfig) addReferenceBuilderComponents(b *app.ReferenceBuilder) {
 	_, repos, _ := b.Result()
 	for _, repo := range repos {
 		repo.SetContextDir(c.ContextDir)
+		repo.SetDockerfileName(c.DockerfileName)
 	}
 }
 
