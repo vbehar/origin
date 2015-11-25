@@ -63,7 +63,11 @@ func fetchSource(dir string, build *api.Build, urlTimeout time.Duration, in io.R
 		if hasGitSource && len(build.Spec.Source.ContextDir) != 0 {
 			baseDir = filepath.Join(baseDir, build.Spec.Source.ContextDir)
 		}
-		return sourceInfo, ioutil.WriteFile(filepath.Join(baseDir, "Dockerfile"), []byte(*dockerfileSource), 0660)
+		dockerfileName := defaultDockerfileName
+		if len(build.Spec.Source.DockerfileName) != 0 {
+			dockerfileName = build.Spec.Source.DockerfileName
+		}
+		return sourceInfo, ioutil.WriteFile(filepath.Join(baseDir, dockerfileName), []byte(*dockerfileSource), 0660)
 	}
 
 	return sourceInfo, nil
